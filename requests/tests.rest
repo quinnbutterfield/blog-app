@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "How to add an entry to a database",
+  "author": "Quinn Butterfield",
+  "url": "https://twitter.com",
+  "likes": 10000
+}
