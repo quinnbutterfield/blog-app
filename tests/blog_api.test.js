@@ -5,6 +5,7 @@ require('express-async-errors')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const { blogToRemove } = require('./test_helper')
 
 
 
@@ -94,8 +95,37 @@ describe('api test:', () => {
 
   })
 
-  afterAll(() => {
-    mongoose.connection.close()
+  test('A blog can be deleted', async () => {
+    const blog = await helper.blogToRemove()
+    await api
+      .delete(`/api/blogs/${blog.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const titles = blogsAtEnd.map(b => b.title)
+
+    expect(titles).not.toContain(blogToRemove.title)
+
+
+  })
+
+  test('A blog can be updated', async () => {
+    const blog = await helper.blogToRemove()
+    const likesBefore = blog.likes
+
+    const updatedBlog = await api
+      .put(`/api/blogs/${blog.id}`)
+      .send({ ...blog, likes: 37 })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(updatedBlog.body.likes).not.toEqual(likesBefore)
+    expect(updatedBlog.body.likes).toEqual(37)
+
+
   })
 })
 
+afterAll(() => {
+  mongoose.connection.close()
+})

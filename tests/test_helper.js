@@ -51,9 +51,22 @@ const blogs = [
   }
 ]
 
+const blogToRemove = async () => {
+  const blog = new Blog({
+    title: 'This is gonna be deleted',
+    author: 'me',
+    url: 'https://twitter.com',
+    likes: 51
+  })
+  await blog.save()
+  //console.log(blog)
+  return blog
+
+}
+
 const blogsInDb = async () => {
   const dbBlogs = await Blog.find({})
   return dbBlogs.map(b => b.toJSON())
 }
 
-module.exports = { blogs, blogsInDb }
+module.exports = { blogs, blogToRemove, blogsInDb }
