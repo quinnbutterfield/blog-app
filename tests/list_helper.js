@@ -60,7 +60,7 @@ const mostBlogs = (blogs) => {
   //first step group by authors
 
   const blogsByAuthor = groupByAuthor(blogs)
-  /* REFACTORED BUT SAVED FOR POSTERITY
+  /*REFACTORED BUT SAVED FOR POSTERITY
   //REFACTOR THIS
   let max = 0
   let maxAuthor = ''
@@ -74,7 +74,6 @@ const mostBlogs = (blogs) => {
  */
   const reducer = (max, author) => {
     const numBlogs = blogsByAuthor[author].length
-    console.log(numBlogs, author)
     max = numBlogs > max.blogs ? { blogs: numBlogs, author: author } : max
     return max
   }
