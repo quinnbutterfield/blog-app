@@ -5,7 +5,6 @@ require('express-async-errors')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { blogToRemove } = require('./test_helper')
 
 
 
@@ -104,7 +103,7 @@ describe('api test:', () => {
     const blogsAtEnd = await helper.blogsInDb()
     const titles = blogsAtEnd.map(b => b.title)
 
-    expect(titles).not.toContain(blogToRemove.title)
+    expect(titles).not.toContain(helper.blogToRemove.title)
 
 
   })

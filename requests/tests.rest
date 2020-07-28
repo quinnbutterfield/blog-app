@@ -2,8 +2,37 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Here's another entry",
-  "author": "Quinn Butterfield",
+  "title": "another blog",
+  "author": "q man",
   "url": "https://twitter.com",
-  "likes": 10000
+  "likes": 10000,
+  "user": "5f2086b5e2ad77412480ed21"
 }
+
+###
+//create a new user
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "password": "password",
+  "username": "Quinn",
+  "name": "Quinn Butterfield"
+}
+
+###
+//login
+
+post http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "password"
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
