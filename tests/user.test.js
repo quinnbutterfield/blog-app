@@ -11,7 +11,7 @@ beforeEach(async () => {
   await User.deleteMany({})
 
   let passwordHash = await bcrypt.hash('password', 10)
-  const user = new User({ username: 'root', passwordHash })
+  const user = new User({ username: 'root', passwordHash, name: 'superuser' })
 
   await user.save()
 })

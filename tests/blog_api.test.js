@@ -35,17 +35,20 @@ describe('api test:', () => {
     expect(response.body[0].id).toBeDefined()
   })
 
+  const token = process.env.TEST_TOKEN
+  const newBlog = {
+    title: 'this is a blog for sure',
+    author: 'Gerald',
+    url: 'https://twitter.com',
+    likes: 41
+  }
   test('POST route creates a new blog post', async () => {
-    const newBlog = {
-      title: 'this is a blog for sure',
-      author: 'Gerald',
-      url: 'https://twitter.com',
-      likes: 41
-    }
+
 
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', token)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -68,6 +71,7 @@ describe('api test:', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', token)
       .send(likelessBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -76,7 +80,12 @@ describe('api test:', () => {
     expect(retreivedBlog.likes).toBe(0)
 
   })
-
+  test('Blog cannot be added without proper token authorization', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+  })
   test('Blog cannot be added without a title and URL', async () => {
     const newBlog = {
       author: 'Freddie',
@@ -85,6 +94,7 @@ describe('api test:', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', token)
       .send(newBlog)
       .expect(400)
 
@@ -95,9 +105,18 @@ describe('api test:', () => {
   })
 
   test('A blog can be deleted', async () => {
-    const blog = await helper.blogToRemove()
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', token)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blog = await Blog.findOne({ 'author': 'Gerald' })
+
     await api
       .delete(`/api/blogs/${blog.id}`)
+      .set('Authorization', token)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -114,6 +133,7 @@ describe('api test:', () => {
 
     const updatedBlog = await api
       .put(`/api/blogs/${blog.id}`)
+      .set('Authorization', token)
       .send({ ...blog, likes: 37 })
       .expect(200)
       .expect('Content-Type', /application\/json/)
