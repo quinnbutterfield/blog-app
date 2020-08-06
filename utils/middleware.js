@@ -10,14 +10,14 @@ const requestLogger = (request, response, next) => {
 
 const tokenExtractor = (request, response, next) => {
   const authorization = request.headers.authorization
-  if(authorization && authorization.toLowerCase().startsWith('bearer ')){
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     request.token = authorization.substring(7)
   }
   next()
 }
 
 const unknownEndpoint = (request, response) => {
-  response.status(4041).send({ error: 'unknown endpoint' })
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
 const errorHandler = (error, request, response, next) => {

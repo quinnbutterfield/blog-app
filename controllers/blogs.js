@@ -19,6 +19,7 @@ blogsRouter.post('/', async (request, response) => {
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
+
   const user = await User.findById(decodedToken.id)
   const blog = new Blog({
     title: body.title,
@@ -31,47 +32,34 @@ blogsRouter.post('/', async (request, response) => {
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
+  console.log('blog being created is ', savedBlog)
 
   response.json(savedBlog)
 
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  //TODO refactor so this code isn't redundant
-  const token = request.token
-  const blog = await Blog.findById(request.params.id)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
 
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-  const userid = await (await User.findById(decodedToken.id))._id
-
-  if (!blog) {
-    return response.status(401).json({ error: 'blog not found' })
-  } else if (!userid || !blog.user) {
-    return response.status(401).json({ error: 'you do not have permission to delete this blog' })
-  }
-
-  if (blog.user.toString() === userid.toString()) {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
-  } else {
-    return response.status(401).json({ error: 'you do not have permission to delete this blog' })
-  }
-
-
-
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
+  console.log('body in update is', body)
+  //const userId = body.user.id ? body.user.id : body.user
   const blog = {
+
+    user: body.user,
+    title: body.title,
+    author: body.author,
+    url: body.url,
     likes: body.likes || 0
   }
 
   const updatedBlog = await Blog
     .findByIdAndUpdate(request.params.id, blog, { new: true })
+  console.log('body in update after saved is', body)
   response.json(updatedBlog)
 
 })

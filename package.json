@@ -7,7 +7,8 @@
     "test": "NODE_ENV=test jest --verbose --runInBand",
     "dev": "NODE_ENV=development nodemon index.js",
     "testdev": "NODE_ENV=testdev nodemon index.js",
-    "start": "NODE_ENV=production node index.js"
+    "start": "NODE_ENV=production node index.js",
+    "lint": "eslint ."
   },
   "author": "Quinn Butterfield",
   "license": "ISC",
