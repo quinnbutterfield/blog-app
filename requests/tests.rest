@@ -17,8 +17,8 @@ Content-Type: application/json
 
 {
   "password": "password",
-  "username": "Quinn",
-  "name": "Quinn Butterfield"
+  "username": "root",
+  "name": "Superuser"
 }
 
 ###
@@ -51,3 +51,20 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1a
 
 DELETE http://localhost:3003/api/blogs/5f0e8430c6ab773ed00d3d8f
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlF1aW5uIiwiaWQiOiI1ZjIwODZiNWUyYWQ3NzQxMjQ4MGVkMjEiLCJpYXQiOjE1OTU5Nzg3ODl9.i0ZgICnwUGobbt1h7ffyHWaKNYvLKi-k0MShENH6-M0
+
+
+###
+//like a blog
+
+POST http://localhost:3003/api/blogs/5f503ad0bb57920e62a6d761/comments
+Content-Type: application/json
+
+{
+  "user": "5f4e99800ace7b219c1c48d1",
+  "author": "jon smith",
+  "url": "https://garfieldminusgarfield.net/",
+  "likes": "40",
+  "title": "Garfield type beat",
+  "comments": "wow i love garfield"
+}
+
